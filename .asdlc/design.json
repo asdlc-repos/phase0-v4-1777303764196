@@ -1,0 +1,24 @@
+{
+  "overview": "A simple single-page web application that serves a static 'Hello World' message to visitors. The architecture consists of a lightweight frontend web application that renders the greeting directly in the browser without requiring backend services. The application is containerized and deployed as a standalone web component.",
+  "requirements": [
+    "The application must display 'Hello World' text to all visitors",
+    "The page must load and display the greeting immediately without delay",
+    "The application must be responsive and work on both desktop and mobile browsers",
+    "The application must serve the same content consistently on page refresh",
+    "The application must expose a /health endpoint for monitoring and readiness checks"
+  ],
+  "components": [
+    {
+      "name": "hello-world-web",
+      "componentType": "web-app",
+      "language": "TypeScript / React",
+      "dependsOn": [],
+      "entrypoint": "deployment/web-application",
+      "buildpack": "docker",
+      "appPath": "/hello-world-web",
+      "openAPISpec": "openapi: 3.0.3\ninfo:\n  title: Hello World Web Application\n  version: 1.0.0\n  description: A simple web application that displays Hello World\npaths:\n  /health:\n    get:\n      summary: Health check endpoint\n      description: Returns the health status of the web application\n      operationId: healthCheck\n      responses:\n        '200':\n          description: Application is healthy\n          content:\n            application/json:\n              schema:\n                type: object\n                properties:\n                  status:\n                    type: string\n                    example: ok\n                  timestamp:\n                    type: string\n                    format: date-time\n                required:\n                  - status",
+      "componentAgentInstructions": "Implement a static React single-page application in TypeScript that displays 'Hello World' to visitors. Technology stack: Use React 18+ with TypeScript, Vite as the build tool, and a minimal Express server to serve the built static files. Port: The Express server must listen on port 9090. Frontend implementation: Create a React component that renders an h1 element containing the text 'Hello World'. Apply CSS styling to center the text both horizontally and vertically on the page, use a clean sans-serif font, and ensure the layout is responsive for mobile and desktop viewports. The page should have a white background with dark text for readability. Backend implementation: Set up an Express server that serves the React build output from the dist directory at the root path. Implement a /health GET endpoint that returns JSON with status ok and a timestamp in ISO 8601 format. The health endpoint must return HTTP 200. Build configuration: Configure Vite to build the React application for production. Create a Dockerfile with a multi-stage build: stage 1 builds the React app using node:18-alpine and npm run build, stage 2 uses node:18-alpine to run the Express server, copying the built files from stage 1. The container must expose port 9090. File structure: Place all source code in /hello-world-web directory. Include package.json with dependencies for react, react-dom, express, and devDependencies for vite, typescript, @vitejs/plugin-react. Create tsconfig.json with appropriate compiler options. Include a .dockerignore file excluding node_modules and build artifacts. Error handling: The Express server should handle 404 errors gracefully. Ensure the application starts successfully and logs the listening port. Testing: The application must load without errors, display Hello World immediately, maintain state across refreshes, and respond to /health checks within 100ms."
+    }
+  ],
+  "sourceSpec": "spec-v1"
+}
